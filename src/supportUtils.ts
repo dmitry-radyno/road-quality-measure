@@ -1,0 +1,2 @@
+export const isOrientationSupported = () => window.DeviceOrientationEvent && window.DeviceOrientationEvent.requestPermission;
+export const isMotionSupported = () => window.DeviceMotionEvent && window.DeviceMotionEvent.requestPermission;

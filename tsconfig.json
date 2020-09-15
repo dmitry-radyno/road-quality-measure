@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "module": "esnext",
+        "target": "esnext",
+        "noImplicitAny": true,
+        "removeComments": true
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

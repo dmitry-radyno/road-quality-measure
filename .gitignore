@@ -1,0 +1,6 @@
+rootCA.key
+rootCA.pem
+server.config
+dist/*.js
+node_modules
+package-lock.json

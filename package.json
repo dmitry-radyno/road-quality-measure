@@ -1,0 +1,25 @@
+{
+  "name": "measure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "measure.js",
+  "scripts": {
+    "watch": "webpack -w --config webpack.config.js --mode development",
+    "server": "nodemon index.js",
+    "build": "webpack -w --config webpack.config.js --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dmitry Radyno",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "nconf": "^0.10.0"
+  }
+}
