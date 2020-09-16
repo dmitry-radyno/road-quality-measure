@@ -32,8 +32,10 @@ export class DataCollector extends EventHandler {
     }
 
     async start() {
-        await this.measures.start();
-        this.timeout = setInterval(this.capture.bind(this), 50);
+        if (!this.isCapturing()) {
+            await this.measures.start();
+            this.timeout = setInterval(this.capture.bind(this), 50);
+        }
     }
 
     stop() {
@@ -43,5 +45,10 @@ export class DataCollector extends EventHandler {
 
     isCapturing() {
         return !!this.timeout;
+    }
+
+    clear() {
+        this.stop();
+        this.data = [];
     }
 }

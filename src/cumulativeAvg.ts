@@ -1,4 +1,7 @@
-export class CumulativeAvg {
+import { EventHandler } from "./utils/eventHandler";
+import { disable } from "./utils/htmlUtils";
+
+export class CumulativeAvg extends EventHandler {
     private avg = 0;
     private n = 0;
     private values: number[] = [];
@@ -13,6 +16,8 @@ export class CumulativeAvg {
         }
         this.avg = (value + this.n*this.avg)/(this.n + 1);
         this.n++;
+
+        this.trigger("update");
     }
 
     get value() {
@@ -20,6 +25,16 @@ export class CumulativeAvg {
     }
 
     get dispersion() {
+        if (this.n === 0) {
+            return 0;
+        }
         return this.values.reduce((sum, v) => sum + Math.pow((v - this.avg), 2), 0) / this.n;
+    }
+
+    clear() {
+        this.avg = 0;
+        this.n = 0;
+        this.values = [];
+        this.trigger("update");
     }
 }

@@ -63,4 +63,8 @@ export class Chart {
         }, "");
         this.path.setAttributeNS(null, "d", d);
     };
+
+    clear() {
+        this.path.setAttributeNS(null, "d", "");
+    }
 }

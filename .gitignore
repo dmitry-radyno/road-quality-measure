@@ -2,5 +2,6 @@ rootCA.key
 rootCA.pem
 server.config
 dist/*.js
+dist/*.css
 node_modules
 package-lock.json
