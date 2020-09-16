@@ -5,9 +5,10 @@ import { IMovement, RoadMeasure } from "./acceleration/roadMeasure";
 import { RandomMeasure } from "./acceleration/randomMeasure";
 import { isMotionSupported, isOrientationSupported } from "./utils/supportUtils";
 import { DataCollector } from "./dataCollector";
-import { disable, enable } from "./utils/htmlUtils";
+import { disable, enable, hide, show } from "./utils/htmlUtils";
 import { AvgView } from "./ui/avgView";
-import { PollManager } from "./ui/pollManager";
+import { RoadTypeDialog } from "./ui/roadTypeDialog";
+import { TitleDialog } from './ui/titleDialog';
 
 export interface IMeasureSource {
     value: IMovement;
@@ -33,15 +34,16 @@ let stop = document.querySelector("#stop") as HTMLElement;
 let save = document.querySelector("#save") as HTMLElement;
 let clear = document.querySelector("#clear") as HTMLElement;
 
-disable(stop);
+show(start);
+hide(stop);
 disable(save);
 disable(clear);
 
 start.addEventListener("click", async () => {
     await data.start();
 
-    disable(start);
-    enable(stop);
+    hide(start);
+    show(stop);
     disable(save);
     disable(clear);
 }, false);
@@ -49,8 +51,8 @@ start.addEventListener("click", async () => {
 stop.addEventListener("click", () => {
     data.stop();
 
-    enable(start);
-    disable(stop);
+    show(start);
+    hide(stop);
     enable(save);
     enable(clear);
 }, false);
@@ -67,22 +69,31 @@ clear.addEventListener("click", () => {
 save.addEventListener("click", async () => {
     [start, stop, save, clear].forEach(disable);
 
-    let pollManager = new PollManager();
-    let type = await pollManager.getRoadType();
-    let name = await pollManager.getTitle();
+    try {
+        let type = await new RoadTypeDialog().getRoadType();
+        console.log(type);
 
-    /* await dataStore.setItem({
-        name,
-        type,
-        data: data.values
-    }); */
+        let title = await new TitleDialog().getTitle();
+        console.log(title);
+    
+        /* await dataStore.setItem({
+            name,
+            type,
+            data: data.values
+        }); */
+    
+        let dataItem = {
+            title,
+            type,
+            data: data.values
+        };
+        console.log(dataItem);
 
-    let dataItem = {
-        name,
-        type,
-        data: data.values
-    };
-    console.log(dataItem);
-
-    [start, save, clear].forEach(enable);
+        [start, stop, save, clear].forEach(enable);
+    } catch(e) {
+        [start, stop, save, clear].forEach(enable);
+        if (e) {
+            alert("Что-то пошло не так");
+        }
+    }
 });

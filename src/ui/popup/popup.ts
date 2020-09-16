@@ -13,7 +13,18 @@ export class Popup {
         this.container.appendChild(content);
     }
 
-    constructor(parent: HTMLElement) {
+    private calcPos() {
+        let width = this.container.offsetWidth;
+        let height = this.container.offsetHeight;
+        let parentWidth = this.parent.offsetWidth;
+        let parentHeight = this.parent.offsetHeight;
+        this.container.style.left = `${(parentWidth - width) / 2}px`;
+        this.container.style.top = `${(parentHeight - height) / 2}px`;
+    }
+
+    constructor(
+        private readonly parent: HTMLElement
+    ) {
         this.container = document.createElement("div");
         addClass(this.container, "popup");
         hide(this.container);
@@ -31,9 +42,20 @@ export class Popup {
 
         show(this.overlay);
         show(this.container);
+        this.calcPos();
     }
 
     hide() {
+        hide(this.overlay);
         hide(this.container);
+    }
+
+    destroy() {
+        this.overlay.parentNode.removeChild(this.overlay);
+        this.container.parentNode.removeChild(this.container);
+    }
+
+    get element() {
+        return this.container;
     }
 }

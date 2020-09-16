@@ -13,7 +13,7 @@ const roadTypes: { [key: string]: string } = {
     "other": "Другое"
 };
 
-export class PollManager {
+export class RoadTypeDialog {
     getRoadType() {
         return new Promise((resolve, reject) => {
             let popup = new Popup(document.body);
@@ -29,12 +29,28 @@ export class PollManager {
             popup.show(`
                 <div class="road-types">
                     <div class="road-types__options">${roadTypesHtml}</div>
-                </div>
-                
-                <div class="road-types__controls">
-                    <button class="road-types__cancel" id="cancel">Отменить</button>
-                    <button class="road-types__apply" id="apply">Дальше</button>
+                    <div class="road-types__controls">
+                        <button class="secondary-button road-types__control road-types__cancel">Отменить</button>
+                        <button class="primary-button road-types__control road-types__apply">Дальше</button>
+                    </div>
                 </div>`);
+
+            popup.element.querySelector(".road-types__cancel").addEventListener("click", () => {
+                popup.hide();
+                popup.destroy();
+                reject();
+            }, false);
+
+            popup.element.querySelector(".road-types__apply").addEventListener("click", () => {
+                let checked = popup.element.querySelector<HTMLInputElement>(".road-types__radio:checked");
+
+                if (checked) {
+                    let value = checked.value;
+                    popup.hide();
+                    popup.destroy();
+                    resolve(value);
+                }
+            }, false);
         });
     }
 
