@@ -5,3 +5,4 @@ dist/*.js
 dist/*.css
 node_modules
 package-lock.json
+data/*.json
