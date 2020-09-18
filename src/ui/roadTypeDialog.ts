@@ -15,8 +15,8 @@ const roadTypes: { [key: string]: string } = {
 
 export class RoadTypeDialog {
     getRoadType() {
-        return new Promise((resolve, reject) => {
-            let popup = new Popup(document.body);
+        return new Promise<string>((resolve, reject) => {
+            let popup = new Popup(document.body, "Покрытие");
             
             let roadTypesHtml = Object.keys(roadTypes).map(value => {
                 let label = roadTypes[value];

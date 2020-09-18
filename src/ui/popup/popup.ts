@@ -3,11 +3,12 @@ import { addClass, hide, show } from "../../utils/htmlUtils";
 export class Popup {
     
     private readonly container: HTMLElement;
+    private readonly content: HTMLElement;
     private readonly overlay: HTMLElement;
 
     private injectContent(content: HTMLElement | DocumentFragment | string) {
         if (typeof content === "string") {
-            this.container.innerHTML = content;
+            this.content.innerHTML = content;
             return;
         }
         this.container.appendChild(content);
@@ -23,10 +24,13 @@ export class Popup {
     }
 
     constructor(
-        private readonly parent: HTMLElement
+        private readonly parent: HTMLElement,
+        title: string
     ) {
         this.container = document.createElement("div");
         addClass(this.container, "popup");
+        this.container.innerHTML = `<div class="popup__title"></div>
+                                    <div class="popup__content"></div>`;
         hide(this.container);
 
         this.overlay = document.createElement("div");
@@ -35,6 +39,8 @@ export class Popup {
 
         parent.appendChild(this.overlay);
         parent.appendChild(this.container);
+        this.content = this.container.querySelector(".popup__content") as HTMLElement;
+        (this.container.querySelector(".popup__title") as HTMLElement).textContent = title;
     }
 
     show(content: HTMLElement | DocumentFragment | string) {

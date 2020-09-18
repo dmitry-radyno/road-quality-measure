@@ -2,8 +2,8 @@ import { Popup } from "./popup/popup";
 
 export class TitleDialog {
     getTitle() {
-        return new Promise((resolve, reject) => {
-            let popup = new Popup(document.body);
+        return new Promise<string>((resolve, reject) => {
+            let popup = new Popup(document.body, "Где? Как ощущения?");
 
             popup.show(`
                 <div class="title-dialog">

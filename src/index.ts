@@ -9,6 +9,8 @@ import { disable, enable, hide, show } from "./utils/htmlUtils";
 import { AvgView } from "./ui/avgView";
 import { RoadTypeDialog } from "./ui/roadTypeDialog";
 import { TitleDialog } from './ui/titleDialog';
+import { DataStore } from "./dataStore";
+import { toast } from './ui/toast';
 
 export interface IMeasureSource {
     value: IMovement;
@@ -22,7 +24,8 @@ const measures: IMeasureSource = isOrientationSupported() && isMotionSupported()
 const data = new DataCollector(measures);
 let chart = new Chart(document.querySelector("#chart"));
 let avg = new CumulativeAvg();
-const avgView = new AvgView(document.querySelector("#measures") as HTMLElement, avg);
+new AvgView(document.querySelector("#measures") as HTMLElement, avg);
+let dataStore = new DataStore();
 
 data.attach("update", (value: number) => {
     avg.add(value);
@@ -71,29 +74,20 @@ save.addEventListener("click", async () => {
 
     try {
         let type = await new RoadTypeDialog().getRoadType();
-        console.log(type);
+        let description = await new TitleDialog().getTitle();
 
-        let title = await new TitleDialog().getTitle();
-        console.log(title);
-    
-        /* await dataStore.setItem({
-            name,
+        await dataStore.addItem({
+            description,
             type,
             data: data.values
-        }); */
-    
-        let dataItem = {
-            title,
-            type,
-            data: data.values
-        };
-        console.log(dataItem);
+        });
 
+        toast("Сохранено");
         [start, stop, save, clear].forEach(enable);
     } catch(e) {
         [start, stop, save, clear].forEach(enable);
         if (e) {
-            alert("Что-то пошло не так");
+            toast("Что-то пошло не так", "error");
         }
     }
 });
