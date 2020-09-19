@@ -1,8 +1,9 @@
-rootCA.key
-rootCA.pem
+*.key
+*.pem
 server.config
 dist/*.js
 dist/*.css
 node_modules
 package-lock.json
 data/*.json
+deploy.txt

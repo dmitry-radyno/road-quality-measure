@@ -17,10 +17,10 @@ nconf.defaults({
 var jsonParser = bodyParser.json()
 
 var app = express();
-app.use(express.static("./dist/"));
+app.use(express.static("../dist/"));
 
 app.post("/api/measurement", jsonParser, async function (req, res) {
-    fs.writeFile(`./data/${Date.now()}.json`, JSON.stringify(req.body), (err) => {
+    fs.writeFile(`../data/${Date.now()}.json`, JSON.stringify(req.body), (err) => {
         if (err) throw err;
         res.send("{}");
     });
