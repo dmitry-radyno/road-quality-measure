@@ -5,22 +5,27 @@ var http = require("http");
 var https = require("https");
 var bodyParser = require("body-parser");
 var fs = require("fs");
-var util = require("util");
+var path = require("path");
 
-nconf.file("./server.config");
+nconf.file(path.resolve(__dirname, "server.config"));
 nconf.defaults({
     "http": {
         "port": 80
     }
 });
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json({
+    limit: "4mb"
+});
 
 var app = express();
-app.use(express.static("../dist/"));
+app.use(express.static(path.resolve(__dirname, "../dist/")));
 
 app.post("/api/measurement", jsonParser, async function (req, res) {
-    fs.writeFile(`../data/${Date.now()}.json`, JSON.stringify(req.body), (err) => {
+    let fileName = path.resolve(__dirname, `../data/${Date.now()}.json`);
+    let data = JSON.stringify(req.body);
+
+    fs.writeFile(fileName, data, (err) => {
         if (err) throw err;
         res.send("{}");
     });
@@ -28,6 +33,8 @@ app.post("/api/measurement", jsonParser, async function (req, res) {
 
 var httpServer = http.createServer(app);
 httpServer.listen(nconf.get("http:port"));
+
+console.log("Running http");
 
 if (nconf.get("https")) {
     const keyFile = nconf.get("https:keyFile");
@@ -41,4 +48,5 @@ if (nconf.get("https")) {
     }, app);
     
     httpsServer.listen(nconf.get("https:port"));
+    console.log("Running https");
 }
