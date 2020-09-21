@@ -1,5 +1,4 @@
-import { EventHandler } from "./utils/eventHandler";
-import { disable } from "./utils/htmlUtils";
+import { EventHandler } from "../utils/eventHandler";
 
 export class CumulativeAvg extends EventHandler {
     private avg = 0;

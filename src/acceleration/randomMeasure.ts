@@ -1,4 +1,4 @@
-import { IMeasureSource } from "../index";
+import { IMeasureSource } from "../acceleration/measure";
 
 export class RandomMeasure implements IMeasureSource {
     get value() {

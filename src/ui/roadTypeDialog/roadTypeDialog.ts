@@ -1,7 +1,7 @@
-import { htmlEscape } from "../utils/htmlUtils";
-import { Popup } from "./popup/popup";
-
-export type TRoadType = "asphalt" | "tile-square" | "tile-short" | "tile-long" | "other" | "tile-square-rough" | "tile-square-smooth";
+import "./roadTypeDialog.less";
+import { htmlEscape } from "../../utils/htmlUtils";
+import { Popup } from "../popup/popup";
+import { TRoadType } from "../../data/dataStore";
 
 const roadTypes: { [key: string]: string } = {
     "asphalt": "Асфальт",
@@ -10,12 +10,14 @@ const roadTypes: { [key: string]: string } = {
     "tile-long": "Плитка вдоль",
     "tile-rough": "Плитка грубая",
     "tile-smooth": "Плитка гладкая",
-    "other": "Другое"
+    "other": "Другое покрытие"
 };
+
+export const getRoadDescription = (roadType: TRoadType) => roadTypes[roadType];
 
 export class RoadTypeDialog {
     getRoadType() {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<TRoadType>((resolve, reject) => {
             let popup = new Popup(document.body, "Покрытие");
             
             let roadTypesHtml = Object.keys(roadTypes).map(value => {
@@ -48,7 +50,7 @@ export class RoadTypeDialog {
                     let value = checked.value;
                     popup.hide();
                     popup.destroy();
-                    resolve(value);
+                    resolve(value as TRoadType);
                 }
             }, false);
         });

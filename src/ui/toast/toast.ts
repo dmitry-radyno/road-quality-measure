@@ -1,3 +1,5 @@
+import "./toast.less";
+
 export function toast(text: string, type: "normal" | "error" = "normal", timeout = 3000) {
     let div = document.createElement("div");
     div.className = "toast";

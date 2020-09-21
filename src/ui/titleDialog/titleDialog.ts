@@ -1,4 +1,5 @@
-import { Popup } from "./popup/popup";
+import "./titleDialog.less";
+import { Popup } from "../popup/popup";
 
 export class TitleDialog {
     getTitle() {

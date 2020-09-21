@@ -1,9 +1,5 @@
 import { deg2rad, IAcceleration, IRotation, rotate } from "../utils/angleUtils";
-import { IMeasureSource } from "../index";
-
-export interface IMovement extends IAcceleration, IRotation {
-
-}
+import { IMeasureSource, IMovement } from "../acceleration/measure";
 
 export class RoadMeasure implements IMeasureSource {
 

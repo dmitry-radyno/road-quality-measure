@@ -2,7 +2,12 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: {
+        "index": "./src/index.ts",
+        "measure": "./src/measure.ts",
+        "measurements": "./src/measurements.ts",
+        "measurement": "./src/measurement.ts"
+    },
     module: {
         rules: [
             {
@@ -18,18 +23,24 @@ module.exports = {
                     'less-loader'
                 ]
             },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                  'file-loader',
+                ],
+            },
         ],
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'app.css'
+            filename: '[name].css'
         })
     ],
     resolve: {
         extensions: ['.ts', '.js'],
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
 };

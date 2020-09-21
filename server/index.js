@@ -21,13 +21,52 @@ var jsonParser = bodyParser.json({
 var app = express();
 app.use(express.static(path.resolve(__dirname, "../dist/")));
 
+const dataDir = path.normalize(path.resolve(__dirname, `../data/`));
+
 app.post("/api/measurement", jsonParser, async function (req, res) {
-    let fileName = path.resolve(__dirname, `../data/${Date.now()}.json`);
+    let fileName = path.resolve(dataDir, `${Date.now()}.json`);
     let data = JSON.stringify(req.body);
 
     fs.writeFile(fileName, data, (err) => {
         if (err) throw err;
-        res.send("{}");
+        res.json({});
+    });
+});
+
+app.get("/api/measurement/:name", async function (req, res) {
+    let file = req.params.name.trim();
+
+    if (file === "") {
+        res.status(500).send("Invalid file name");
+        return;
+    }
+
+    let fileName = path.normalize(path.resolve(dataDir, file));
+    if (fileName.indexOf(dataDir) === -1) {
+        res.status(500).send("Invalid file name");
+        return;
+    }
+
+    if (fileName.substring(fileName.length - 4) !== "json") {
+        res.status(500).send("Invalid file name");
+        return;
+    }
+
+    fs.readFile(fileName, (err, data) => {
+        if (err) throw err;
+        res.send(data);
+    });
+});
+
+app.get("/api/measurement", async function (req, res) {
+    let dirName = path.resolve(__dirname, `../data/`);
+
+    fs.readdir(dirName, function (err, files) {
+        if (err) {
+            return console.log("Unable to scan directory: " + err);
+        }
+        let measurements = files.filter(file => file.substring(file.length - 5) === ".json");
+        res.json(measurements);
     });
 });
 

@@ -1,5 +1,5 @@
-import { EventHandler } from "./utils/eventHandler";
-import { IMeasureSource } from "./index";
+import { EventHandler } from "../utils/eventHandler";
+import { IMeasureSource } from "../acceleration/measure";
 
 interface IDataPoint {
     datetime: number;

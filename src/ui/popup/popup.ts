@@ -1,3 +1,4 @@
+import "./popup.less";
 import { addClass, hide, show } from "../../utils/htmlUtils";
 
 export class Popup {
