@@ -2,11 +2,16 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+    node: {
+        global: true,
+        fs: "empty",
+    },
     entry: {
         "index": "./src/index.ts",
         "measure": "./src/measure.ts",
         "measurements": "./src/measurements.ts",
-        "measurement": "./src/measurement.ts"
+        "measurement": "./src/measurement.ts",
+        "boxes": "./src/boxes.ts"
     },
     module: {
         rules: [
