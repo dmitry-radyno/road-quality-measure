@@ -1,6 +1,8 @@
 *.key
 *.pem
 server.config
+dist/*.png
+dist/*.jpg
 dist/*.js
 dist/*.css
 node_modules

@@ -1,7 +1,7 @@
 .button {
     display: inline-block;
-    background-color: #eaeaea;
-    border: 1px solid #cacaca;
+    background-color: #fcfeff;
+    border: 1px solid #3baab7;
     color: #000000;
     text-decoration: none;
     padding: 8px;
@@ -9,19 +9,20 @@
     font-size: 14px;
     font-weight: 400;
 
+    &--big {
+        font-size: 24px;
+        font-weight: 400;
+        padding: 16px;
+    }
+
     &:disabled {
         color: #aaaaaa;
     }
 }
 
 .primary-button {
-    background-color: #ffecb3;
-    border: 1px solid #cbba83;
-    padding: 8px;
-    border-radius: 4px;
-
-    background-color: #3a8440;
-    border: 1px solid #3a8440;
+    background-color: #3baab7;
+    border: 1px solid #3baab7;
     padding: 8px;
     border-radius: 4px;
     color: #ffffff;
@@ -29,15 +30,21 @@
     font-weight: 500;
 
     &:active {
-        background-color: #1b5e20;
-        border-color: #1b5e20;
+        background-color: #2e8690;
+        border-color: #2e8690;
+    }
+
+    &--big {
+        font-size: 24px;
+        font-weight: 400;
+        padding: 16px;
     }
 }
 
 .secondary-button {
     display: inline-block;
     background-color: #ffffff;
-    border: 1px solid #3a8440;
+    border: 1px solid #3baab7;
     color: #000000;
     text-decoration: none;
     padding: 8px;
@@ -47,5 +54,11 @@
 
     &:active {
         background-color: #e6e6e6;
+    }
+
+    &--big {
+        font-size: 24px;
+        font-weight: 400;
+        padding: 16px;
     }
 }

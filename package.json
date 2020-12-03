@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "webpack -w --config webpack.config.js --mode development",
     "server": "nodemon server/index.js",
-    "build": "webpack -w --config webpack.config.js --mode production",
+    "build": "webpack --config webpack.config.js --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dmitry Radyno",

@@ -8,9 +8,22 @@ export const removeClass = (el: HTMLElement, className: string) => {
     el.classList.remove(className);
 };
 
-export const hide = (el: HTMLElement) => addClass(el, "hidden");
+export const hide = (el: HTMLElement) => {
+    el.style.display = "none";
+};
 
-export const show = (el: HTMLElement) => removeClass(el, "hidden");
+export const show = (el: HTMLElement) => {
+    el.style.display = "";
+};
+
+export const toggle = (el: HTMLElement, isShown: boolean) => {
+    if (isShown) {
+        show(el);
+        return;
+    }
+    hide(el);
+    return;
+};
 
 export const disable = (el: HTMLElement) => el.setAttribute("disabled", "");
 

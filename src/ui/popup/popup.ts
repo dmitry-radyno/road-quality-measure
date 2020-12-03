@@ -30,6 +30,7 @@ export class Popup {
     ) {
         this.container = document.createElement("div");
         addClass(this.container, "popup");
+        addClass(this.container, "popup--big");
         this.container.innerHTML = `<div class="popup__title"></div>
                                     <div class="popup__content"></div>`;
         hide(this.container);

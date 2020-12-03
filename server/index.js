@@ -24,49 +24,85 @@ app.use(express.static(path.resolve(__dirname, "../dist/")));
 const dataDir = path.normalize(path.resolve(__dirname, `../data/`));
 
 app.post("/api/measurement", jsonParser, async function (req, res) {
-    let fileName = path.resolve(dataDir, `${Date.now()}.json`);
-    let data = JSON.stringify(req.body);
+    let data = req.body;
 
-    fs.writeFile(fileName, data, (err) => {
+    let id = Date.now().toString();
+
+    let metaFileName = path.resolve(dataDir, `${id}.meta.json`);
+    let meta = {
+        id,
+        description: data.description,
+        type: data.type
+    };
+
+    let dataFileName = path.resolve(dataDir, `${id}.data.json`);
+    let points = data.data;
+
+    fs.writeFile(metaFileName, JSON.stringify(meta), (err) => {
         if (err) throw err;
-        res.json({});
+
+        fs.writeFile(dataFileName, JSON.stringify(points), (err) => {
+            if (err) throw err;
+
+            res.json({});
+        });
     });
 });
 
 app.get("/api/measurement/:name", async function (req, res) {
-    let file = req.params.name.trim();
+    let id = req.params.name.trim();
 
-    if (file === "") {
+    if (id === "") {
         res.status(500).send("Invalid file name");
         return;
     }
 
-    let fileName = path.normalize(path.resolve(dataDir, file));
-    if (fileName.indexOf(dataDir) === -1) {
+    let metaFileName = path.normalize(path.resolve(dataDir, `${id}.meta.json`));
+    let dataFileName = path.normalize(path.resolve(dataDir, `${id}.data.json`));
+
+    if (metaFileName.indexOf(dataDir) === -1 || dataFileName.indexOf(dataDir) === -1) {
         res.status(500).send("Invalid file name");
         return;
     }
 
-    if (fileName.substring(fileName.length - 4) !== "json") {
-        res.status(500).send("Invalid file name");
-        return;
-    }
+    let meta = await readFile(metaFileName);
+    let data = await readFile(dataFileName);
 
-    fs.readFile(fileName, (err, data) => {
-        if (err) throw err;
-        res.send(data);
-    });
+    res.send(JSON.stringify({
+        ...JSON.parse(meta),
+        data: JSON.parse(data)
+    }));
 });
+
+const readFile = (fileName) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(fileName, (err, data) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(data);
+        });
+    });
+};
+
+const readJsonFile = async (fileName) => {
+    let data = await readFile(fileName);
+    return JSON.parse(data);
+};
 
 app.get("/api/measurement", async function (req, res) {
     let dirName = path.resolve(__dirname, `../data/`);
 
-    fs.readdir(dirName, function (err, files) {
+    fs.readdir(dirName, async (err, files) => {
         if (err) {
             return console.log("Unable to scan directory: " + err);
         }
-        let measurements = files.filter(file => file.substring(file.length - 5) === ".json");
-        res.json(measurements);
+        let metaFiles = files.filter(file => file.substring(file.length - 9) === "meta.json");
+        let meta = await Promise.all(metaFiles.map(f => path.resolve(dirName, f)).map(readJsonFile));
+
+        res.json(meta);
     });
 });
 

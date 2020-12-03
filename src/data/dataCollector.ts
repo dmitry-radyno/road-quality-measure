@@ -6,12 +6,15 @@ interface IDataPoint {
     value: number;
 }
 
+const CAPTURE_DURATION = 30000;
+
 export class DataCollector extends EventHandler {
 
     private data: IDataPoint[] = [];
     private timeout = 0;
+    private started: number;
 
-    private capture() {
+    private async capture() {
         let value = this.measures.value.z;
 
         this.data.push({
@@ -19,6 +22,23 @@ export class DataCollector extends EventHandler {
             value
         });
         this.trigger("update", value);
+        await this.scheduleNextCapture();
+    }
+
+    private timer(timeout: number) {
+        return new Promise((res) => {
+            this.timeout = setTimeout(res, timeout);
+        });
+    }
+    private async scheduleNextCapture() {
+        let diff = Date.now() - this.started;
+
+        if (diff < CAPTURE_DURATION) {
+            await this.timer(10);
+            await this.capture();
+            return;
+        }
+        this.timeout = 0;
     }
 
     constructor(
@@ -31,24 +51,34 @@ export class DataCollector extends EventHandler {
         return this.data;
     }
 
-    async start() {
-        if (!this.isCapturing()) {
+    async collect() {
+        if (!this.capturing) {
             await this.measures.start();
-            this.timeout = setInterval(this.capture.bind(this), 10);
+
+            this.started = Date.now();
+            await this.scheduleNextCapture();
         }
     }
 
     stop() {
-        clearInterval(this.timeout);
-        this.timeout = 0;
+        clearTimeout(this.timeout);
+        this.timeout = undefined;
     }
 
-    isCapturing() {
+    get capturing() {
         return !!this.timeout;
     }
 
+    get complete() {
+        let diff = Date.now() - this.started;
+        return diff >= CAPTURE_DURATION;
+    }
+
+    get duration() {
+        return Math.min(Date.now() - this.started, CAPTURE_DURATION);
+    }
+
     clear() {
-        this.stop();
         this.data = [];
     }
 }

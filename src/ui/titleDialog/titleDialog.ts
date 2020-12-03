@@ -4,7 +4,7 @@ import { Popup } from "../popup/popup";
 export class TitleDialog {
     getTitle() {
         return new Promise<string>((resolve, reject) => {
-            let popup = new Popup(document.body, "Где? Как ощущения?");
+            let popup = new Popup(document.body, "Где? Как?");
 
             popup.show(`
                 <div class="title-dialog">
@@ -12,8 +12,8 @@ export class TitleDialog {
                         <textarea class="title-dialog__input"></textarea>
                     </label>
                     <div class="title-dialog__controls">
-                        <button class="secondary-button title-dialog__control title-dialog__cancel" id="cancel">Отменить</button>
-                        <button class="primary-button title-dialog__control title-dialog__apply" id="apply">Дальше</button>
+                        <button class="secondary-button secondary-button--big title-dialog__control title-dialog__cancel" id="cancel">Отменить</button>
+                        <button class="primary-button primary-button--big title-dialog__control title-dialog__apply" id="apply">Дальше</button>
                     </div>
                 </div>`);
 

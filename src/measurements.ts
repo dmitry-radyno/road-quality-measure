@@ -1,14 +1,19 @@
 import "./measurements.less";
-import { DataStore } from "./data/dataStore";
+import { DataStore, IMeasurementMetaId } from "./data/dataStore";
 import { List } from "./ui/list/list";
+import { getRoadDescription } from "./ui/roadTypeDialog/roadTypeDialog";
+import { htmlEscape } from "./utils/htmlUtils";
 
 (async () => {
     let dataStore = new DataStore();
     let items = await dataStore.getItems();
 
-    let list = new List<string>(value => `<div class="measurement">
-        <input class="measurement__checkbox" type="checkbox" name="compare" id="${value}" />
-        <a class="measurement__link" href="measurement.html#${value}">${value}</a>
+    let list = new List<IMeasurementMetaId>(value => `<div class="measurement">
+        <input class="measurement__checkbox" type="checkbox" name="compare" id="${value.id}" />
+        <a class="measurement__link" href="measurement.html#${value.id}">
+            <div class="measurement__primary">${getRoadDescription(value.type)}</div>
+            <div class="measurement__secondary">${htmlEscape(value.description)}</div>
+        </a>
     </div>`);
     list.mount(document.querySelector("#measurements"));
     list.value = items;

@@ -1,3 +1,5 @@
+import { toggle } from "../utils/htmlUtils";
+
 export class Chart {
     private readonly svg: SVGElement;
     private readonly path: SVGPathElement;
@@ -49,8 +51,8 @@ export class Chart {
         }
         values = this.tail(values, this.maxPoints);
 
-        let max = 8; //Math.max.apply(Math, values);
-        let min = -8; //Math.min.apply(Math, values);
+        let max = 9; //Math.max.apply(Math, values);
+        let min = -9; //Math.min.apply(Math, values);
         let alp = max - min;
         let ratio = this.height / alp;
 
@@ -66,5 +68,9 @@ export class Chart {
 
     clear() {
         this.path.setAttributeNS(null, "d", "");
+    }
+
+    set shown(isShown: boolean) {
+        toggle(this.container, isShown);
     }
 }

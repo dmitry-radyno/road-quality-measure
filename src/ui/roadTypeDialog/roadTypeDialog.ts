@@ -32,8 +32,8 @@ export class RoadTypeDialog {
                 <div class="road-types">
                     <div class="road-types__options">${roadTypesHtml}</div>
                     <div class="road-types__controls">
-                        <button class="secondary-button road-types__control road-types__cancel">Отменить</button>
-                        <button class="primary-button road-types__control road-types__apply">Дальше</button>
+                        <button class="secondary-button secondary-button--big road-types__control road-types__cancel">Отменить</button>
+                        <button class="primary-button primary-button--big road-types__control road-types__apply">Дальше</button>
                     </div>
                 </div>`);
 
